@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsSanPham">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:id="@+id/scrollVewDetails"
+            android:layout_marginBottom="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/icon_persion"
+                    android:scaleType="centerCrop"
+                    android:id="@+id/imgSPDetail"/>
+
+                <TextView
+                    android:id="@+id/nameSPDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imgSPDetail"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Name"
+                    android:textSize="30dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/giaSPDetail"
+                    android:layout_below="@id/nameSPDetail"
+                    android:text="Gia"
+                    android:layout_marginLeft="10dp"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/red"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/motaSPDetail"
+                    android:text="Mô tả"
+                    android:textSize="20dp"
+                    android:layout_below="@id/giaSPDetail"/>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardPRShop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/motaSPDetail">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linerPRShop"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+                            <ImageView
+                                android:id="@+id/imgShopDetai"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:layout_weight="3"
+                                android:src="@drawable/icon_persion">
+                            </ImageView>
+                            <LinearLayout
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:textSize="20dp"
+                                    android:layout_weight="1"
+                                    android:id="@+id/namePRShop"
+                                    android:text="ten shop"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:layout_weight="2">
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        app:cardBackgroundColor="#00B527"
+                                        app:cardCornerRadius="30dp"/>
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:textSize="15dp"
+                                        android:text="online"/>
+
+                                </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:text="Địa chỉ"/>
+
+                            </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textColor="@color/red"
+                                android:layout_weight="3"
+                                android:text="Xem shop"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="5">
+                            <TextView
+                                android:id="@+id/soSPDetail"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="abc"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Các sản phẩm cùng shop"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="@color/red"
+                    android:layout_below="@id/cardPRShop"
+                    android:id="@+id/spLQ"
+                    android:textSize="20dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/recyclerSPDetail"
+                    android:layout_below="@id/spLQ"
+                    tools:ignore="NotSibling">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+        </ScrollView>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="Chỉnh sửa"
+            android:textColor="@color/black"
+            android:id="@+id/btnChinhSuaDetails"
+            android:layout_alignParentBottom="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linerBottomDetails"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnadd_Cart"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:text="Thêm vào giỏ hàng"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/btn_chatDetails"
+                android:text="chat"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
