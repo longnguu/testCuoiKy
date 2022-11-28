@@ -21,7 +21,7 @@
             android:id="@+id/qlsp_add"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="30dp"
             app:cardBackgroundColor="@color/yellow_pri"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"

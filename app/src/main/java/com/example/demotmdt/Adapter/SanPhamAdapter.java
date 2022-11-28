@@ -63,6 +63,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
                 intent.putExtra("giasp",sanPham.getGia());
                 intent.putExtra("motasp",sanPham.getMota());
                 intent.putExtra("UID",sanPham.getUID());
+                intent.putExtra("idSP",sanPham.getMaSP());
 
                 context.startActivity(intent);
 

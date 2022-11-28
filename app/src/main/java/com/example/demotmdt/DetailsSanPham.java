@@ -7,11 +7,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +49,12 @@ public class DetailsSanPham extends AppCompatActivity {
     SanPhamAdapter sanPhamAdapter;
     RecyclerView recyclerView;
     TextView ssp;
+    String imgUS;
+    String nameShop,imgShopp,mobileShop;
+    boolean ktra=true,kt=false;
+    String chatKey="0";
+    String m_Text;
+    String maSP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,7 @@ public class DetailsSanPham extends AppCompatActivity {
             this.getWindow().getDecorView().getWindowInsetsController().setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS);
         }
         AnhXa();
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
@@ -63,6 +77,7 @@ public class DetailsSanPham extends AppCompatActivity {
         giasp = getIntent().getStringExtra("giasp");
         img = getIntent().getStringExtra("imgsp");
         uid = getIntent().getStringExtra("UID");
+        maSP = getIntent().getStringExtra("idSP");
         progressDialog.show();
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -70,7 +85,12 @@ public class DetailsSanPham extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ssp.setText("Tổng sản phẩm: "+snapshot.child("SanPham").child(uid).getChildrenCount());
                 for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    nameShop=dataSnapshot.child(uid).child("tenUser").getValue(String.class);
+                    imgShopp =dataSnapshot.child(uid).child("imgUS").getValue(String.class);
+                    mobileShop =dataSnapshot.child(uid).child("sdt").getValue(String.class);
+                    dataSnapshot.child(uid).child("imgUS").getValue(String.class);
                     tenShop.setText(dataSnapshot.child(uid).child("tenUser").getValue(String.class));
+                    imgUS=dataSnapshot.child(uid).child("imgUS").getValue(String.class);
                     Picasso.get().load(dataSnapshot.child(uid).child("imgUS").getValue(String.class)).into(imgShop);
                     progressDialog.dismiss();
                 }
@@ -91,7 +111,7 @@ public class DetailsSanPham extends AppCompatActivity {
                     SanPham sanPham = new SanPham(ten);
                     sanPham.setImg(dataSnapshot.child("img").getValue(String.class));
                     sanPham.setMaSP(dataSnapshot.getKey());
-                    sanPham.setUID(getIntent().getStringExtra("mobile"));
+                    sanPham.setUID(getIntent().getStringExtra("UID"));
                     sanPham.setMota(dataSnapshot.child("mota").getValue(String.class));
                     sanPham.setGia(dataSnapshot.child("gia").getValue(String.class));
                     sanPham.setDaBan("0");
@@ -105,6 +125,103 @@ public class DetailsSanPham extends AppCompatActivity {
 
             }
         });
+        bthaddcart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailsSanPham.this);
+                builder.setTitle("Nhập số lượng");
+
+// Set up the input
+                final EditText input = new EditText(DetailsSanPham.this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_Text = input.getText().toString();
+                        databaseReference.child("GioHang").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                ktra=false;
+                                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+                                        if (dataSnapshot1.getKey().equals(maSP)){
+                                            ktra=true;
+                                            databaseReference.child("GioHang").child(mobile).child(maSP).child("soLuong").setValue(String.valueOf(Long.parseLong(dataSnapshot1.child("soLuong").getValue(String.class))+Long.parseLong(m_Text)));
+                                        }
+                                }
+                                if (!ktra){
+                                    databaseReference.child("GioHang").child(mobile).child(maSP).child("soLuong").setValue(m_Text);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
+        btnchat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        kt=true;
+                        chatKey= String.valueOf(snapshot.getChildrenCount()+1);
+                        for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                            System.out.println(dataSnapshot.child("user_1").getValue(String.class)+"ád");
+                            System.out.println(dataSnapshot.child("user_2").getValue(String.class)+"ád");
+                            System.out.println(mobile);
+                            System.out.println(uid);
+                            if((dataSnapshot.child("user_1").getValue(String.class).equals(mobile)  &&  dataSnapshot.child("user_2").getValue(String.class).equals(uid))
+                            || (dataSnapshot.child("user_1").getValue(String.class).equals(uid)     &&  dataSnapshot.child("user_2").getValue(String.class).equals(mobile))){
+                                chatKey=dataSnapshot.getKey();
+                                kt=false;
+                            }
+                        }
+                        System.out.println(chatKey);
+                        if (!kt){
+                            Intent intent = new Intent(DetailsSanPham.this,Chat.class);
+                            intent.putExtra("name",nameShop);
+                            intent.putExtra("profilePic",imgUS);
+                            intent.putExtra("chatKey",chatKey);
+                            intent.putExtra("mobile",mobileShop);
+                            startActivity(intent);
+                        }else{
+                            databaseReference.child("chat").child(chatKey).child("user_1").setValue(mobile);
+                            databaseReference.child("chat").child(chatKey).child("user_2").setValue(uid);
+                            Intent intent = new Intent(DetailsSanPham.this,Chat.class);
+                            intent.putExtra("name",nameShop);
+                            intent.putExtra("profilePic",imgUS);
+                            intent.putExtra("chatKey",chatKey);
+                            intent.putExtra("mobile",mobileShop);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
 
         sanPhamAdapter=new SanPhamAdapter(sanPhams,this);
         GridLayoutManager linearLayoutManager = new GridLayoutManager(this,2, RecyclerView.VERTICAL,false);
