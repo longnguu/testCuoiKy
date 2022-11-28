@@ -41,7 +41,7 @@ public class Chat extends AppCompatActivity {
     String getUserMobile;
     RecyclerView chattingRecyclerView;
     ChatAdapter chatAdapter;
-    boolean loadingFirstTime= true;
+    public static boolean loadingFirstTime= true;
     private final List<ChatList> chatLists = new ArrayList<>();
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -76,10 +76,11 @@ public class Chat extends AppCompatActivity {
                             chatKey = String.valueOf(snapshot.child("chat").getChildrenCount() + 1);
                         }
                     }
-                    loadingFirstTime=true;
+
                     if (snapshot.hasChild("chat")){
                         if (snapshot.child("chat").child(chatKey).hasChild("messenger")) {
                             chatLists.clear();
+
                             for(DataSnapshot chatSnapshot: snapshot.child("chat").child(chatKey).child("messenger").getChildren()){
                                 if(chatSnapshot.hasChild("msg")&& chatSnapshot.hasChild("mobile")) {
                                     final String messengerTimeStamps = chatSnapshot.getKey();
@@ -95,10 +96,10 @@ public class Chat extends AppCompatActivity {
 
                                     if (loadingFirstTime || Long.parseLong(messengerTimeStamps)> Long.parseLong(MemoryData.getLastMsgTs(Chat.this,chatKey))){
                                         loadingFirstTime=false;
-                                        MemoryData.saveLastMsgTS(messengerTimeStamps,chatKey,Chat.this);
+                                       // MemoryData.saveLastMsgTS(messengerTimeStamps,chatKey,Chat.this);
                                         chatAdapter.updateChat(chatLists);
-                                        chattingRecyclerView.scrollToPosition(chatLists.size()-1);
                                     };
+                                    chattingRecyclerView.scrollToPosition(chatLists.size()-1);
                                 }
                             }
                         }
@@ -119,7 +120,7 @@ public class Chat extends AppCompatActivity {
                 databaseReference.child("chat").child(chatKey).child("user_2").setValue(getMobile);
                 databaseReference.child("chat").child(chatKey).child("messenger").child(currentTimeStamp).child("msg").setValue(getTxtMessenger);
                 databaseReference.child("chat").child(chatKey).child("messenger").child(currentTimeStamp).child("mobile").setValue(getUserMobile);
-                //MemoryData.saveLastMsgTS(currentTimeStamp,chatKey,Chat.this);
+                MemoryData.saveLastMsgTS(currentTimeStamp,chatKey,Chat.this);
                 chatAdapter.updateChat(chatLists);
                 edtChat.setText("");
             }

@@ -184,10 +184,6 @@ public class DetailsSanPham extends AppCompatActivity {
                         kt=true;
                         chatKey= String.valueOf(snapshot.getChildrenCount()+1);
                         for (DataSnapshot dataSnapshot:snapshot.getChildren()){
-                            System.out.println(dataSnapshot.child("user_1").getValue(String.class)+"ád");
-                            System.out.println(dataSnapshot.child("user_2").getValue(String.class)+"ád");
-                            System.out.println(mobile);
-                            System.out.println(uid);
                             if((dataSnapshot.child("user_1").getValue(String.class).equals(mobile)  &&  dataSnapshot.child("user_2").getValue(String.class).equals(uid))
                             || (dataSnapshot.child("user_1").getValue(String.class).equals(uid)     &&  dataSnapshot.child("user_2").getValue(String.class).equals(mobile))){
                                 chatKey=dataSnapshot.getKey();

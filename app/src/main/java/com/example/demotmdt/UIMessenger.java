@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -31,10 +32,12 @@ public class UIMessenger extends AppCompatActivity {
     ProgressDialog progressDialog;
     List<MessengerList> messengerLists = new ArrayList<>();
     String lastMessenger = "";
-    private MessengerAdapter messengerAdapter;
+    MessengerAdapter messengerAdapter;
     String chatKey = "";
     int unseenMessenger = 0;
     private boolean dataSet;
+    int i;
+    int max;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +68,32 @@ public class UIMessenger extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 final String profilePicUrl = snapshot.child("users").child(mobile).child("imgUS").getValue(String.class);
 
-              if (!profilePicUrl.isEmpty()) {
-                  Picasso.get().load(profilePicUrl).into(profilePic);
-              }
-              progressDialog.dismiss();
+                if (!profilePicUrl.isEmpty()) {
+                    Picasso.get().load(profilePicUrl).into(profilePic);
+                }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 progressDialog.dismiss();
+            }
+        });
+        databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                i=0;
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    if (dataSnapshot.child("user_1").getValue(String.class).equals(MemoryData.getData(UIMessenger.this)) || dataSnapshot.child("user_2").getValue(String.class).equals(MemoryData.getData(UIMessenger.this))){
+                        i++;
+                        System.out.println(i);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -85,23 +105,22 @@ public class UIMessenger extends AppCompatActivity {
                 messengerLists.clear();
                 for (DataSnapshot dataSnapshot : snapshot.child("users").getChildren()) {
                     final String getMobile = dataSnapshot.getKey();
+                    dataSet = false;
                     messengerLists.clear();
-                    dataSet=false;
-                    lastMessenger="";
-                    chatKey="";
-                    unseenMessenger=0;
                     if (!getMobile.equals(mobile)) {
-                        messengerLists.clear();
                         final String getName = dataSnapshot.child("tenUser").getValue(String.class);
                         final String profilePic = dataSnapshot.child("imgUS").getValue(String.class);
                         databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                dataSet = false;
                                 int getChatCount = (int) snapshot.getChildrenCount();
                                 if (getChatCount > 0) {
                                     for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
                                         String getKey = dataSnapshot1.getKey();
                                         chatKey = getKey;
+                                        lastMessenger = "";
+                                        unseenMessenger = 0;
                                         if (dataSnapshot1.hasChild("user_1") && dataSnapshot1.hasChild("user_2") && dataSnapshot1.hasChild("messenger")) {
                                             String getUserOne = dataSnapshot1.child("user_1").getValue(String.class);
                                             String getUserTwo = dataSnapshot1.child("user_2").getValue(String.class);
@@ -109,35 +128,43 @@ public class UIMessenger extends AppCompatActivity {
                                                 for (DataSnapshot chatDataSnapShot : dataSnapshot1.child("messenger").getChildren()) {
                                                     final long getMessngerKey = Long.parseLong(chatDataSnapShot.getKey());
                                                     long getLastseenMsg = 0;
-                                                    getLastseenMsg = Long.parseLong(MemoryData.getLastMsgTs(UIMessenger.this, getKey));
-                                                    if (chatDataSnapShot.child("mobile").getValue(String.class).equals(mobile)){
-                                                        lastMessenger = "Bạn: "+chatDataSnapShot.child("msg").getValue(String.class);
-                                                    }else lastMessenger = chatDataSnapShot.child("msg").getValue(String.class);
-
+                                                    getLastseenMsg = Long.parseLong(MemoryData.getLastMsgTs(UIMessenger.this, chatKey));
+//                                                   // if (chatDataSnapShot.child("mobile").getValue(String.class).equals(MemoryData.getData(UIMessenger.this))){
+//                                                        lastMessenger = "Bạn: "+chatDataSnapShot.child("msg").getValue(String.class);
+//                                                    }else
+                                                    lastMessenger = chatDataSnapShot.child("msg").getValue(String.class);
                                                     if (getMessngerKey > getLastseenMsg) {
                                                         unseenMessenger++;
                                                     }
                                                 }
+                                                if (messengerLists.size()==i) {
+                                                    messengerLists.clear();
+                                                }
                                                 MessengerList messengerList = new MessengerList(getName, getMobile, lastMessenger, profilePic, chatKey, unseenMessenger);
                                                 messengerLists.add(messengerList);
+
                                                 MainActivity.updateUnSeen(messengerLists);
-                                                if(!dataSet){
-                                                    dataSet = true;
-                                                    messengerAdapter.updateData(messengerLists);
-                                                }
+
                                             }
                                         }
                                     }
-                                }
+                                    if (!dataSet) {
+                                        dataSet = true;
+                                        messengerAdapter.updateData(messengerLists);
+                                    }
 
+                                }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                             }
                         });
                     }
+
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

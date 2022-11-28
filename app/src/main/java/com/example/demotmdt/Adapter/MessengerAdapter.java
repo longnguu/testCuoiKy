@@ -15,7 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demotmdt.Chat;
+import com.example.demotmdt.Class.MemoryData;
 import com.example.demotmdt.Class.MessengerList;
+import com.example.demotmdt.MainActivity;
 import com.example.demotmdt.R;
 import com.squareup.picasso.Picasso;
 
@@ -42,6 +44,7 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
     @Override
     public void onBindViewHolder(@NonNull MessengerAdapter.ViewHolder holder, int position) {
         MessengerList list2=  messengerLists.get(position);
+        list2.setPos(position);
         if (!list2.getProfilePic().isEmpty()){
             Picasso.get().load(list2.getProfilePic()).into(holder.profilePic);
         }
@@ -63,14 +66,20 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
                 intent.putExtra("name",list2.getName());
                 intent.putExtra("profilePic",list2.getProfilePic());
                 intent.putExtra("chatKey",list2.getChatKey());
-                System.out.println(list2.getChatKey()+"ckl2");
-                System.out.println("abc"+list2.getChatKey());
                 intent.putExtra("mobile",list2.getEmail());
+                final String currentTimeStamp= String.valueOf(System.currentTimeMillis()).substring(0,10);
+                MemoryData.saveLastMsgTS(currentTimeStamp,list2.getChatKey(), view.getContext());
+                messengerLists.get(list2.getPos()).setUnseenMessenger(0);
+                Chat.loadingFirstTime=true;
+                updateData(messengerLists);
+                notifyDataSetChanged();
+                MainActivity.updateUnSeen(messengerLists);
                 mContext.startActivity(intent);
             }
         });
     }
     public void updateData(List<MessengerList> messengerLists){
+
         this.messengerLists = messengerLists;
         notifyDataSetChanged();
     }

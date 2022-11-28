@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.demotmdt.Adapter.MessengerAdapter;
 import com.example.demotmdt.Adapter.ViewPageAdapter;
 import com.example.demotmdt.Class.MessengerList;
 import com.example.demotmdt.Class.User;

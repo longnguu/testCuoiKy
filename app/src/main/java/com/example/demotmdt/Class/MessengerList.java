@@ -2,7 +2,15 @@ package com.example.demotmdt.Class;
 
 public class MessengerList {
     String name,email,lastMessenger,profilePic,chatKey;
-    int unseenMessenger;
+    int unseenMessenger,pos;
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
 
     public MessengerList(String name, String email, String lastMessenger, String profilePic, String chatKey, int unseenMessenger) {
         this.name = name;
