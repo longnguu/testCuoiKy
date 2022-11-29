@@ -47,6 +47,7 @@
                     android:layout_height="20dp"
                     app:cardCornerRadius="20dp"
                     app:cardBackgroundColor="@color/red"
+                    android:visibility="gone"
                     android:layout_alignParentEnd="true">
                     <TextView
                         android:id="@+id/textUnseenMain"
@@ -74,13 +75,21 @@
                 android:src="@drawable/icon_cart" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/topnav"
-        android:layout_above="@+id/navnav"
-        android:id="@+id/recycleViewMainSearch"
-        android:visibility="gone"/>
+        android:id="@+id/cardrecycler"
+        android:visibility="gone"
+        android:layout_above="@+id/navnav">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/topnav"
+            android:layout_above="@+id/navnav"
+            android:id="@+id/recycleViewMainSearch" />
+    </androidx.cardview.widget.CardView>
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpg"
         android:layout_width="match_parent"

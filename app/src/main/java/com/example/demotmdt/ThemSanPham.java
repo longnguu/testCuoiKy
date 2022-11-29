@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -37,12 +38,16 @@ public class ThemSanPham extends AppCompatActivity {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     ImageView imageView;
     TextView tenSP,loaiSP,moTa,gia,soLuong;
+    ProgressDialog progressDialog;
     String mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_san_pham);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
         AnhXa();
         Button pick = (Button) findViewById(R.id.upLoad);
         Button save=(Button) findViewById(R.id.saveQLSP);
@@ -57,6 +62,7 @@ public class ThemSanPham extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 Calendar calendar = Calendar.getInstance();
                 storageReference.child("image"+calendar.getTimeInMillis()+".png");
                 imageView.setDrawingCacheEnabled(true);
@@ -69,6 +75,7 @@ public class ThemSanPham extends AppCompatActivity {
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
 
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -90,9 +97,21 @@ public class ThemSanPham extends AppCompatActivity {
                                             sanPham.setMaSP(currentTimeStamp);
                                             sanPham.setDaBan("0");
                                             databaseReference.child("SanPham").child(mobile).child(currentTimeStamp).setValue(sanPham);
+//                                            Intent intent = new Intent(ThemSanPham.this, QuanLySanPham.class);
+//                                            intent.putExtra("email",getIntent().getStringExtra("email"));
+//                                            intent.putExtra("mobile",getIntent().getStringExtra("mobile"));
+//                                            intent.putExtra("name",getIntent().getStringExtra("name"));
+//                                            startActivity(intent);
+                                            Toast.makeText(ThemSanPham.this, "Đã thêm.", Toast.LENGTH_SHORT).show();
+                                            tenSP.setText("");
+                                            soLuong.setText("");
+                                            gia.setText("");
+                                            moTa.setText("");
+                                            loaiSP.setText("");
+                                            imageView.setImageDrawable(null);
                                         }else
                                             Toast.makeText(ThemSanPham.this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
-                                        System.out.println(imageUrl);
+                                        progressDialog.dismiss();
                                     }
                                 });
                             }

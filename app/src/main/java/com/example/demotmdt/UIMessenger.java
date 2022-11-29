@@ -128,6 +128,7 @@ public class UIMessenger extends AppCompatActivity {
                                                 for (DataSnapshot chatDataSnapShot : dataSnapshot1.child("messenger").getChildren()) {
                                                     final long getMessngerKey = Long.parseLong(chatDataSnapShot.getKey());
                                                     long getLastseenMsg = 0;
+                                                    if (!MemoryData.getLastMsgTs(UIMessenger.this, chatKey).isEmpty())
                                                     getLastseenMsg = Long.parseLong(MemoryData.getLastMsgTs(UIMessenger.this, chatKey));
 //                                                   // if (chatDataSnapShot.child("mobile").getValue(String.class).equals(MemoryData.getData(UIMessenger.this))){
 //                                                        lastMessenger = "Bạn: "+chatDataSnapShot.child("msg").getValue(String.class);

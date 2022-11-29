@@ -2,57 +2,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/layoutItemSP"
-        android:orientation="vertical">
+        app:cardBackgroundColor="@color/yellow_pri"
+        app:cardCornerRadius="20dp">
         <androidx.cardview.widget.CardView
-            android:layout_width="200dp"
-            android:layout_height="200dp">
-            <ImageView
-                android:id="@+id/imgSP"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            android:layout_margin="3dp">
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/layoutItemSP"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:cardCornerRadius="10dp">
+                    <ImageView
+                        android:id="@+id/imgSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"/>
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tenSP"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:text="ten sp"
+                    android:textSize="20dp"
+                    android:maxLines="2"/>
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/giaSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="20dp"
+                        android:textColor="@color/red"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:text="giá">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/slbSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="20dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:gravity="right"
+                        android:layout_marginRight="5dp"
+                        android:text="slban">
+                    </TextView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
         </androidx.cardview.widget.CardView>
-        <TextView
-            android:id="@+id/tenSP"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:text="ten sp"
-            android:textSize="20dp"
-            android:maxLines="2"/>
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/giaSP"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:textColor="@color/red"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:text="giá">
-            </TextView>
-            <TextView
-                android:id="@+id/slbSP"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:gravity="right"
-                android:textStyle="bold"
-                android:text="slban">
-            </TextView>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

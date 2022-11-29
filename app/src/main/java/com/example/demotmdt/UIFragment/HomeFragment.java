@@ -38,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.checkerframework.checker.units.qual.A;
@@ -63,8 +64,8 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView,recyclerViewSP;
     DanhMucAdapter danhMucAdapter;
     ArrayList<DanhMuc> danhMucs;
-    ArrayList<SanPham> sanPhams;
-    SanPhamAdapter sanPhamAdapter;
+    public static ArrayList<SanPham> sanPhams;
+    public static SanPhamAdapter sanPhamAdapter;
     GestureDetector gestureDetector;
     ScrollView scrollView;
     CardView topCV;

@@ -112,7 +112,9 @@ public class ProfileFragment extends Fragment {
         Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), Login.class));
+                Intent intent = new Intent(getActivity(), Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }
